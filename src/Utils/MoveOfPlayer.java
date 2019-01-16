@@ -32,4 +32,9 @@ public class MoveOfPlayer implements Serializable {
     public int getCurrentValue() {
         return currentValue;
     }
+
+    @Override
+    public String toString() {
+        return "{" + coord + " " + currentValue + " " + prevValue + "}";
+    }
 }

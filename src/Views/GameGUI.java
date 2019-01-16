@@ -19,7 +19,7 @@ public class GameGUI extends JFrame {
         JPanel boardPanel = new JPanel();
         boardPanel.setLayout(new BorderLayout(10, 10));
         boardPanel.add(boardView, BorderLayout.CENTER);
-        boardPanel.add(menuView, BorderLayout.NORTH);
+        boardPanel.add(menuView, BorderLayout.SOUTH);
 
         add(boardPanel);
 
@@ -41,8 +41,6 @@ public class GameGUI extends JFrame {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
                 objectOutputStream.writeObject(boardController);
                 System.out.println("Zapisano");
-
-
 
             } catch (FileNotFoundException e) {
                 System.err.println("SAVE: FILE NOT FOUND");

@@ -31,6 +31,18 @@ public class Board implements Serializable {
         return 0;
     }
 
+    public Field getField(int x, int y) {
+        for(Segment s : board) {
+            for (int i = 0; i < s.getSegment().length; i++) {
+                Field f = s.getField(i);
+                if (f.getCoordX() == x && f.getCoordY() == y) {
+                    return f;
+                }
+            }
+        }
+        return new Field(0, 0, 0);
+    }
+
     public int setFieldValue(int x, int y, int val) {
         for(Segment s : board) {
             for (int i = 0; i < s.getSegment().length; i++) {

@@ -26,10 +26,19 @@ public class BoardController implements Serializable {
     }
 
     public FriendlyField[][] getBoard() {
+        FriendlyField[][]readyBoard = new FriendlyField[size][size];
+
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                Field f = board.getField(x,y);
+                FriendlyField ff = new FriendlyField(f.getValue(), new Coordinate(f.getCoordX(), f.getCoordY()), f.isEditable());
+                readyBoard[y][x] = ff;
+            }
+        }
         return readyBoard;
     }
 
-    public void generateBoard(){
+    private void generateBoard(){
         Field[][] rawBoard;
         rawBoard = new Field[size][];
         int y = 0;
@@ -190,35 +199,35 @@ public class BoardController implements Serializable {
         s13.setSegment(new Field[]{rawBoard[7][4], rawBoard[7][5], rawBoard[7][6], rawBoard[7][7], rawBoard[7][8], rawBoard[8][4], rawBoard[8][5], rawBoard[8][6], rawBoard[8][7], rawBoard[8][8]});
         board.addSegment(s13);
 
+
         ArrayList<Segment> segments = board.getSegments();
         Random random = new Random();
         FriendlyField [][] readyBoard = new FriendlyField[size][size];
         for (Segment segment : segments) {
             int randomFieldIndex = random.nextInt(segment.getSizeOfSegment());
-            Field f = segment.getField(randomFieldIndex);
-            readyBoard[f.getCoordY()][f.getCoordX()] = new FriendlyField(f.getValue(), new Coordinate(f.getCoordX(), f.getCoordY()), false);
-//            showedFieldsToPlayer.add(new Coordinate(f.getCoordX(), f.getCoordY()));
-//            System.out.println(readyBoard[f.getCoordY()][f.getCoordX()]);
-        }
-
-
-        for (y = 0; y < size; y++) {
-            for (int x = 0; x < size; x++) {
-                if (readyBoard[y][x] == null) {
-                    readyBoard[y][x] = new FriendlyField(0, new Coordinate(x, y), true);
-                    board.setFieldValue(x, y, 0);
+            for (int i = 0; i < segment.getSegmentValue(); i++) {
+                Field f = segment.getField(i);
+                if (randomFieldIndex != i) {
+                    f.setValue(0);
+                } else {
+                    f.setEditable(false);
                 }
             }
         }
-
-        this.readyBoard = readyBoard;
-
     }
 
     public int getFieldValue(Coordinate coord) {
         return board.getFieldValue(coord.getCoordX(), coord.getCoordY());
     }
 
+
+    public int addToFieldAndReturn(Coordinate coord, int val) {
+        int currentValue = board.getFieldValue(coord.getCoordX(), coord.getCoordY());
+        int newValue = board.setFieldValue(coord.getCoordX(), coord.getCoordY(), val+currentValue);
+        undoMoves.add(new MoveOfPlayer(coord ,currentValue, newValue));
+        redoMoves.clear();
+        return newValue;
+    }
     public int setFieldValueAndReturn(Coordinate coord, int val) {
         undoMoves.add(new MoveOfPlayer(coord ,getFieldValue(coord), val));
         redoMoves.clear();
@@ -237,7 +246,6 @@ public class BoardController implements Serializable {
     }
 
     public MoveOfPlayer getRedoMove() {
-        System.out.println(redoMoves);
         if (redoMoves.size() <= 0) {
             return null;
         }

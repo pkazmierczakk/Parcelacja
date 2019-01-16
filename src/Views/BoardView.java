@@ -28,12 +28,11 @@ public class BoardView extends JComponent {
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board[y].length; x++) {
                 FriendlyField f = board[y][x];
-                System.out.println(f);
-                BoardButton boardBtn = new BoardButton(f.getVal(), f);
+                BoardButton boardBtn = new BoardButton(f.getVal(), f.getCoord());
                 if (!f.isEditable()) {
                     boardBtn.setEnabled(false);
                 } else {
-                    boardBtn.addMouseListener(new ClickBoardButtonListener(f.getVal()));
+                    boardBtn.addMouseListener(new ClickBoardButtonListener());
                 }
                 boardBtn.decorateButton();
                 boardButtons[y][x] = boardBtn;
@@ -41,8 +40,6 @@ public class BoardView extends JComponent {
                 add(boardBtn);
             }
         }
-        System.out.println("---------------");
-//        repaint();
         revalidate(); // Trzeba to wykonac aby zaktualizowac plansze
     }
 
@@ -56,6 +53,7 @@ public class BoardView extends JComponent {
         if (move == null) {
             return;
         }
+
         boardButtons[move.getCoord().getCoordY()][move.getCoord().getCoordX()].setText(move.getPrevValue());
     }
 
@@ -64,33 +62,26 @@ public class BoardView extends JComponent {
         if (move == null) {
             return;
         }
-        System.out.println("redoMove -> " + move + " " + move.getCoord() + " " + move.getCurrentValue());
-        boardButtons[move.getCoord().getCoordY()][move.getCoord().getCoordX()].setText(move.getCurrentValue());
+        BoardButton bb = boardButtons[move.getCoord().getCoordY()][move.getCoord().getCoordX()];
+        bb.setText(move.getCurrentValue());
     }
 
     public boolean checkSolution() {
         return boardController.checkSolution();
     }
 
-    private class ClickBoardButtonListener implements MouseListener {
-        private int value;
-        ClickBoardButtonListener(int val) {
-            value = val;
-        }
-
+    public class ClickBoardButtonListener implements MouseListener {
         @Override
         public void mousePressed(MouseEvent evt) {
             BoardButton btn = (BoardButton)evt.getSource();
             if (evt.getButton() == MouseEvent.BUTTON1) {
-                value+=2;
+                btn.setText(boardController.addToFieldAndReturn(btn.getCoords(), 2));
+//                btn.addToValue(2);
              } else if (evt.getButton() == MouseEvent.BUTTON3) {
-                value--;
+                btn.setText(boardController.addToFieldAndReturn(btn.getCoords(), -1));
             }
-
-            value = boardController.setFieldValueAndReturn(btn.getCoords(), value);
-            btn.setText(value);
-            btn.setBackground(value);
         }
+
 
         @Override
         public void mouseEntered(MouseEvent e) {
