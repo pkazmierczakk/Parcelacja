@@ -1,10 +1,7 @@
 package Views;
 
-import Controller.BoardController;
-
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 
 public class MenuView extends JComponent {
     private JButton checkSolutionBtn = new JButton("Check solution");
@@ -27,6 +24,13 @@ public class MenuView extends JComponent {
         checkSolutionBtn.addActionListener(evt -> {
             if (boardView.checkSolution()) {
                 JOptionPane.showMessageDialog(gui, "Wygrales!");
+                checkSolutionBtn.setEnabled(false);
+                helpBtn.setEnabled(false);
+                saveBtn.setEnabled(false);
+                loadBtn.setEnabled(false);
+                undoMoveBtn.setEnabled(false);
+                redoMoveBtn.setEnabled(false);
+                boardView.removeListenerFromBoardButtons();
             } else {
                 JOptionPane.showMessageDialog(gui, "Zle rozwiazanie");
             }

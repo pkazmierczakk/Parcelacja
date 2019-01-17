@@ -1,0 +1,31 @@
+
+
+
+
+
+
+
+
+
+
+
+
+    #DONE konstruowanie rozwiazania i zmiany juz dokonanych wyborów czy posunięć
+
+    #DONE kontrolę, czy wykonywane wybory sa zgodne z regułami łamigłowki i czy osiągnięto rozwiązanie
+          (kontrola ta może być robiona na bieżaco lub na życzenie).
+          Realizacja tego punktu zrobiona w taki sposób, że porównuje się aktualny stan ze
+          znalezionym wcześniej prawidłowym rozwiązaniem jest nisko punktowana.
+          Lepsze podejście to przyjęcie założenia, że może być wiele rozwiązań i
+          sprawdzanie zgodności z regułami łamigłówki tak jak są te reguły zapisane.
+          To daje ogólniejszy program, który może być użyty do różnych wersji sytuacji startowej.
+
+
+    #TODO zapamiętywać wszystkie dotad wykonane ruchy i umożliwiać chodzenie w tył i w przód w historii tworzenia rozwiązania łamigłowki.
+
+    #DONE zapisanie na życzenie użytkownika aktualnego stanu łamigłowki (łącznie z historią) do pliku i odtworzenie (na życzenie) tego stanu z pliku po ponownym wystartowaniu programu, czyli dać możliwosć przerwania zabwy i powrotu do niej. Powinna być możliwosć wyboru pliku do zapisu i odczytu,
+
+    #DONE uzyskanie jakichś instrukcji (mini "help")
+
+    #TODO W prostszej wersji można przyjąć, że łamigłówka jest ustalona na sztywno. Wyżej punktowane rozwiązanie powinno dawać możliwość jakiejś modyfikacji ustawienia początkowego. Może to być zrobione tak, że początkowe ustawienie (a może nawet rozmiar planszy) będzie odczytywane z pliku, który można osobno redagować. Inny sposób, to wprowadzić do programu osobną
+          fazę budowania początkowego ustawienia, po zakończeniu której następuje faza rozwiązywania łamigłówki.

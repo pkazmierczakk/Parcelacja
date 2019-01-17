@@ -12,12 +12,11 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class BoardView extends JComponent {
-    private ArrayList<JButton> buttons = new ArrayList<>();
     private BoardButton[][] boardButtons;
     private BoardController boardController;
     BoardView(BoardController boardController) {
         this.boardController = boardController;
-        setLayout(new GridLayout(9,9, 0,0));
+        setLayout(new GridLayout(9,9, 2,2));
         setBoardController(boardController);
     }
 
@@ -32,7 +31,7 @@ public class BoardView extends JComponent {
                 if (!f.isEditable()) {
                     boardBtn.setEnabled(false);
                 } else {
-                    boardBtn.addMouseListener(new ClickBoardButtonListener());
+                    boardBtn.setMouseListener(new ClickBoardButtonListener());
                 }
                 boardBtn.decorateButton();
                 boardButtons[y][x] = boardBtn;
@@ -65,9 +64,16 @@ public class BoardView extends JComponent {
         BoardButton bb = boardButtons[move.getCoord().getCoordY()][move.getCoord().getCoordX()];
         bb.setText(move.getCurrentValue());
     }
-
     public boolean checkSolution() {
         return boardController.checkSolution();
+    }
+
+    public void removeListenerFromBoardButtons() {
+        for (int i = 0; i < boardButtons.length; i++) {
+            for (int j = 0; j < boardButtons[i].length; j++) {
+                boardButtons[i][j].removeMouseListener();
+            }
+        }
     }
 
     public class ClickBoardButtonListener implements MouseListener {

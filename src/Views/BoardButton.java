@@ -5,10 +5,11 @@ import Utils.FriendlyField;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 
 public class BoardButton extends JButton {
     private final static String[] COLORS = new String[] {"#fed766", "#98d2eb", "#e1f2fe", "#b2b1cf", "#8da7be", "#554640", "#a9b18f", "#5b9279", "#8fcb9b", "#d8cfaf", "#e6b89c", "#ed9390", "#4effef", "#73a6ad", "#9b97b2", "#f6caca", "#888888"};
-    private FriendlyField friendlyField;
+    private MouseListener mouseListener;
     private Coordinate coord;
     private boolean isEnabled = true;
 
@@ -27,22 +28,21 @@ public class BoardButton extends JButton {
         super.setText(text);
     }
 
-
-//    public void addToValue(int val) {
-//        System.out.println(currentValue);
-//        currentValue += val;
-//        if (currentValue > 15) {
-//            currentValue %= 16;
-//        } else if (currentValue < 0){
-//            currentValue += 16;
-//        }
-//        setText(currentValue);
-//    }
-
     @Override
     public void setEnabled(boolean b) {
-        isEnabled = false;
-        this.setBorder(BorderFactory.createLineBorder(Color.decode("#662c91"), 3));
+        isEnabled = b;
+        if (!b) {
+            this.setBorder(BorderFactory.createLineBorder(Color.decode("#662c91"), 3));
+        }
+    }
+
+    public void setMouseListener(MouseListener mouseListener) {
+        this.mouseListener = mouseListener;
+        addMouseListener(mouseListener);
+    }
+
+    public void removeMouseListener() {
+        super.removeMouseListener(this.mouseListener);
     }
 
     public Coordinate getCoords() {
@@ -52,7 +52,7 @@ public class BoardButton extends JButton {
     public void decorateButton() {
         this.setForeground(Color.decode("#000000"));
         if (isEnabled)
-            this.setBorder(BorderFactory.createLineBorder(Color.decode("#FFFFFF"), 3));
+            this.setBorder(BorderFactory.createEmptyBorder());
         this.setFont(new Font("Tahoma", Font.BOLD , 15));
     }
 
