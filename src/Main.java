@@ -1,4 +1,3 @@
-import Controller.BoardController;
 import Views.GameGUI;
 
 public class Main {

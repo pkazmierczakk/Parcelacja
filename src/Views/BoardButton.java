@@ -1,7 +1,6 @@
 package Views;
 
 import Utils.Coordinate;
-import Utils.FriendlyField;
 
 import javax.swing.*;
 import java.awt.*;

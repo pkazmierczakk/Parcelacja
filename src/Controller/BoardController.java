@@ -257,21 +257,99 @@ public class BoardController implements Serializable {
     }
 
     public boolean checkSolution() {
-        int occuredNumbers[] = new int[15];
-        int correctSolution[] = new int[15];
-        for(Segment s : board.getSegments()) {
-            correctSolution[s.getSegmentValue()] += s.getSegmentValue();
-            for (int i = 0; i < s.getSegment().length; i++) {
-                Field f = s.getField(i);
-                occuredNumbers[f.getValue()]++;
+        class SolutionFieldHelper {
+            private boolean isEditable;
+            private boolean isVisited;
+            private int value;
+
+            SolutionFieldHelper(boolean isEditable, int value) {
+                this.isEditable = isEditable;
+                this.value = value;
+                this.isVisited = false;
+            }
+
+            public void setVisited(boolean visited) {
+                isVisited = visited;
+            }
+
+            public boolean isEditable() {
+                return isEditable;
+            }
+
+            public boolean isVisited() {
+                return isVisited;
+            }
+
+            public int getValue() {
+                return value;
             }
         }
 
-        for (int i = 0; i < occuredNumbers.length; i++) {
-            if (occuredNumbers[i] != correctSolution[i]) {
-                return false;
+        class CheckSegment {
+            private SolutionFieldHelper [][] board;
+            private int size;
+            private int expectedNumberOfField = 0;
+            private int currentNumbersOfFields = 0;
+            private int valueToCheck;
+
+            CheckSegment(SolutionFieldHelper [][] board, int x, int y, int size) {
+                this.board = board;
+                this.size = size;
+                this.valueToCheck = board[y][x].getValue();
+                check(x,y);
+            }
+
+            private void check(int x, int y) {
+                SolutionFieldHelper currentField = board[y][x];
+                currentNumbersOfFields++;
+                if (!currentField.isEditable()) {
+                    expectedNumberOfField += currentField.getValue();
+                }
+                currentField.setVisited(true);
+
+                if (y > 0 && !board[y-1][x].isVisited() && board[y-1][x].getValue() == valueToCheck) { // UP
+                    check(x, y-1);
+                }
+                if (x < (size-1) && !board[y][x+1].isVisited() && board[y][x+1].getValue() == valueToCheck) { // RIGHT
+                    check(x+1, y);
+                }
+
+                if (y < (size-1) && !board[y+1][x].isVisited() && board[y+1][x].getValue() == valueToCheck) { // DOWN
+                    check(x, y+1);
+                }
+
+                if (x > 0 && !board[y][x-1].isVisited() && board[y][x-1].getValue() == valueToCheck) { // LEFT
+                    check(x-1, y);
+                }
+
+            }
+
+            public boolean isSegmentValid() {
+                return expectedNumberOfField == currentNumbersOfFields;
             }
         }
+
+        SolutionFieldHelper [][]tempBoard = new SolutionFieldHelper[size][size];
+
+        for(Segment s : board.getSegments()) {
+            int segmentSize = s.getSizeOfSegment();
+            for (int i = 0; i < segmentSize; i++) {
+                Field f = s.getField(i);
+                tempBoard[f.getCoordY()][f.getCoordX()] = new SolutionFieldHelper(f.isEditable(), f.getValue());
+            }
+        }
+
+        for (int y = 0; y < size; y++) {
+            for (int x = 0; x < size; x++) {
+                if (!tempBoard[y][x].isVisited()) {
+                    CheckSegment checkSegment = new CheckSegment(tempBoard, x, y, size);
+                    if (!checkSegment.isSegmentValid()) {
+                        return false;
+                    }
+                }
+            }
+        }
+
         return true;
     }
 

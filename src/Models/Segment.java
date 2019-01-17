@@ -24,7 +24,6 @@ public class Segment implements Serializable {
     }
 
     public void setSegment(Field[] segment) {
-//        System.out.println("segment = [" + segment + "]" + segment[0]);
         this.segment = segment;
         setSegmentValue(segment[0].getValue());
     }
@@ -42,16 +41,4 @@ public class Segment implements Serializable {
         }
         return s;
     }
-
-//    public ArrayList<Field> getSegment() {
-//        return segment;
-//    }
-//
-//    public void addField(Field f) {
-//        segment.add(f);
-//    }
-//
-//    public void setSegment(ArrayList<Field> segment) {
-//        this.segment = segment;
-//    }
 }
